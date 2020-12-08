@@ -7,4 +7,4 @@
 **Part 2:** Create an OAS Specification file for the API described in Part 1.
 
 
-Group12_v1.A3.md contains the Part 1 and Shrey_Malhan_ contains the Part 2
+*Group12_v1.A3.md* contains the Part 1 and *Shrey_Malhan_A3* contains the Part 2
