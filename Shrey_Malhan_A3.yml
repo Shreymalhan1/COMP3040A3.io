@@ -1,1 +1,192 @@
 
+openapi: "3.0.0"
+
+info:
+  version: '1.0'
+  title: Winnipeg Transit
+  description: Get the live status of any bus route and information about the public transit according to your needs. It provides specifications for exchanging both static and real time information about bus stops, routes, schedule, service alerts and other details. 
+
+tags:
+  - name: getInfo
+    description: Everything about Winnipeg Transit buses
+    
+  - name: fare
+    description: Information about different transit fares
+
+servers:
+  - url: wpgTransit/openAPI
+  
+paths: 
+  /ticketFair:
+    get: 
+      tags:
+        - fare
+      summary: "Gives the ticket price"
+      description: "Enter in age of the rider and know the cost of the ticket which applies to that age group."
+      parameters:
+      - name: Age
+        in: query
+        description: 'Age of the rider'
+        schema:
+          type: number
+          format: integer
+        required: true
+        example: 23
+      responses:
+        200:
+          description: Successful response
+          content: 
+            application/json:
+              schema:
+                type: array
+                items: 
+                   $ref: '#/components/schemas/ticketFare'
+        
+        400:
+          description: Error
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/400'
+                
+  /peggoPass:
+    get:
+      tags:
+        - getInfo
+      summary: "Gives the peggo pass information"
+      description: "Returns all the information about the different kinds of bus passes available."
+      responses:
+        200:
+          description: Successful response
+          content: 
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/peggoInfo'
+        400:
+          description: Error
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/400'
+                
+  /AllBusRoutes:
+    get:
+      tags:
+        - getInfo
+      summary: "Gives the bus route information"
+      description: "This endpoint returns information about all the busses, like their bus number, their start location and their destination."
+      responses:
+        200:
+          description: Successful response
+          content: 
+            application/json:
+              schema:
+                type: array
+                items: 
+                   $ref: '#/components/schemas/busRoutes'
+        400:
+          description: Error
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/400'
+
+
+
+      
+components:
+  
+  schemas:
+    400:
+      title: Invalid request
+      type: string
+      example: Invalid request
+    
+    ticketFare:
+      properties:
+        Fare:
+          $ref: '#/components/schemas/ticketPrice'
+        Status:
+          $ref: '#/components/schemas/Status'
+    
+    peggoInfo:
+      properties:
+        Fare:
+          $ref: '#/components/schemas/busPass'
+        Status:
+          $ref: '#/components/schemas/Status'
+    
+    busRoutes:
+      properties:
+        Fare:
+          $ref: '#/components/schemas/busRoute'
+        Status:
+          $ref: '#/components/schemas/Status'
+    
+    ticketPrice:
+      properties:
+        id:
+          type: number
+          format: integer
+          example: 01
+        type:
+          type: string
+          example: Youth Fare
+        cash_price:
+          type: number
+          example: 2.5
+        ticket_price:
+          type: number
+          example: 1.33
+        monthly_pass_price:
+          type: number
+          example: 28.50
+    
+    busPass: 
+      properties: 
+        id: 
+          type: number
+          format: integer
+          example: 01
+        fare_type: 
+          type: string
+          example: "Reduced fare"
+        colour:
+          type: string
+          example: "Green"
+    
+    busRoute:
+      properties: 
+        id: 
+          type: number
+          format: interger
+          example: 01
+        bus_number:
+          type: number
+          format: interger
+          example: 162
+        route_name:
+          type: string
+          example: "Downtown to St. Norbert"
+        start_location: 
+          type: string
+          example: "Downtown"
+        end_location: 
+          type: string
+          example: "St. Norbert"
+    
+    Status:
+      properties:
+        status:
+          type: string
+          enum:
+            - OK
+            - INVALID_REQUEST
+            - UNKNOWN_ERROR
+          default: OK
+          
+externalDocs:
+  description: GitHub Repository
+  url: https://github.com/Shreymalhan1/COMP3040A3.io/blob/main/Shrey_Malhan_A3.yml
